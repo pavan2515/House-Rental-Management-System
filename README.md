@@ -296,5 +296,5 @@ Use freely with credit.
 Developed by **Pavan & Team** 💙
 
 
-Just tell me — I’m with you!
+
 
