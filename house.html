@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Details Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        margin-top: 50px;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        text-align: left;
+      }
+
+      input {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button {
+        width: calc(50% - 5px);
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #4caf50;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>House Details Form</h1>
+
+    <!-- Form for entering house details -->
+    <form
+      id="house-details-form"
+      onsubmit="submitForm(event)"
+      action="/house_details_form"
+      method="POST"
+    >
+      <label for="house_id">House ID:</label>
+      <input type="text" id="user_id" name="user_id" required />
+
+      <label for="owner_id">Owner ID:</label>
+      <input type="text" id="owner_id" name="owner_id" required />
+
+      <label for="house_type">House Type:</label>
+      <input type="text" id="house_type" name="house_type" required />
+
+      <label for="address">Address:</label>
+      <input type="text" id="address" name="address" required />
+
+      <button type="button" id="add-btn">Submit</button>
+    </form>
+
+    <!-- Script to handle form submission -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const addBtn = document.getElementById("add-btn");
+        const detailsTableBody = document.getElementById("details-table-body");
+
+        addBtn.addEventListener("click", function () {
+          const user_id = document.getElementById("house_id").value;
+          const owner_id = document.getElementById("owner_id").value;
+          const house_type = document.getElementById("house_type").value;
+          const address = document.getElementById("address").value;
+
+          // Get lease or rent details based on selected option
+          let details = { house_id, owner_id, house_type, address };
+
+          // Add details to table
+          const row = detailsTableBody.insertRow();
+          Object.values(details).forEach((value) => {
+            const cell = row.insertCell();
+            cell.textContent = value;
+          });
+
+          // Add edit and delete buttons
+          const actionCell = row.insertCell();
+          actionCell.innerHTML = `<button class="edit-btn">Edit</button> <button class="delete-btn">Delete</button>`;
+        });
+      });
+    </script>
+  </body>
+</html>

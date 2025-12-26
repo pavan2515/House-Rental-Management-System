@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signup Page</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url(home.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: calc(100% - 32px);
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        display: inline-block;
+    }
+    .password-wrapper {
+        position: relative;
+    }
+    .password-toggle {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        width: 24px; /* Adjust the width to fit the password field */
+        height: auto; /* Maintain aspect ratio */
+        padding-right: 12px;
+    }
+    .password-toggle img {
+        width: 60%;
+        height: auto;
+    }
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+    }
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    .login-link {
+        margin-top: 10px;
+        text-decoration: none;
+        color: #333;
+        font-size: 14px;
+    }
+    .eye-off.png{
+        width: 60px;
+    }
+</style>
+</head>
+<body>
+    <div class="form-container">
+        <form action="/signup" method="POST" onsubmit="return validateForm()">
+            <!-- Your form fields -->
+         
+            <h2>Sign up</h2>
+            <input type="text" name="userid" placeholder="User ID" required>
+            <input type="text" name="firstname" placeholder="First Name" required>
+            <input type="text" name="lastname" placeholder="Last Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <div class="password-wrapper">
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <span class="password-toggle" id="togglePassword">
+                    <img src="eye.png" alt="Show/Hide Password">
+                </span>
+            </div>
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+            <a href="login.html"><input type="submit" value="Sign up"></a>
+            <a href="login.html">Already have an account? Login</a>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('togglePassword');
+            const password = document.getElementById('password');
+            const signupForm = document.getElementById('signup-form');
+
+            togglePassword.addEventListener('click', function () {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                this.querySelector('img').src = type === 'password' ? 'eye.png' : 'eye-off.png';
+            });
+
+            signupForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Get form data
+                const user_id = document.getElementById('user_id').value;
+                const first_name = document.getElementById('first_name').value;
+                const last_name = document.getElementById('last_name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const confirm_password = document.getElementById('confirm_password').value;
+
+                // Validate password match
+                if (password !== confirm_password) {
+                    alert('Passwords do not match');
+                    return;
+                }
+
+                // Send signup data to server
+                fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: user_id,
+                        f_name: first_name,
+                        l_name: last_name,
+                        email: email,
+                        password: password
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to sign up');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data.message);
+                    // Optionally, redirect to another page after successful signup
+                    window.location.href = 'login.html';
+                })
+                .catch(error => {
+                    console.error('Error signing up:', error.message);
+                    alert('Failed to sign up. Please try again.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: beige;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .details-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .details-header h2 {
+            margin: 0;
+        }
+
+        .details-header label {
+            margin-right: 10px;
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .details-table th,
+        .details-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .details-table th {
+            background-color: #f2f2f2;
+            color: black; /* Ensure text color is visible */
+        }
+
+        .owner-info {
+            margin-top: 10px;
+        }
+
+        .house-image {
+            max-width: 300px;
+            align-items: center;
+        }
+    </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const detailsTable = document.getElementById("details-table");
+      const rentOption = document.getElementById("rent-option");
+      const leaseOption = document.getElementById("lease-option");
+      const searchInput = document.getElementById("search-input");
+
+      function displayHouseDetails(option, searchAddress) {
+          detailsTable.innerHTML = ""; // Clear previous details
+
+          fetch(`/houses/${option}?address=${searchAddress}`)
+              .then(response => response.json())
+              .then(data => {
+
+                  data.forEach(detail => {
+
+                      const row = document.createElement("tr");
+                      row.innerHTML = `
+                          <td>
+                              <img class="house-image" src="data:image/jpeg;base64,${detail.image_data}" alt="House Image">
+                          </td>
+                          <td>
+                              <ul>
+                                  <li><strong>House Type:</strong> ${detail.house_type}</li>
+                                  <li><strong>Address:</strong> ${detail.address}</li>
+                                  <li><strong>Details:</strong> ${getOptionDetails(option, detail)}</li>
+                                  <li><strong>Owner Name:</strong> ${detail.f_name} ${detail.l_name}</li>
+                                  <li><strong>Phone:</strong> ${detail.ph_no}</li>
+                              </ul>
+                          </td>
+                      `;
+                      detailsTable.appendChild(row);
+                  });
+              })
+              .catch(error => console.error('Error fetching data:', error));
+      }
+
+      function handleOptionChange() {
+          const selectedOption = rentOption.checked ? rentOption.value : leaseOption.value;
+          const searchAddress = searchInput.value.trim();
+          displayHouseDetails(selectedOption, searchAddress);
+      }
+
+      function getOptionDetails(option, detail) {
+          if (option === "rent") {
+              return `Rent Price: ${detail.r_price}, Advance Amount: ${detail.advance_amt}`;
+          } else if (option === "lease") {
+              return `Lease Price: ${detail.l_price}, Period: ${detail.period}`;
+          }
+          return "";
+      }
+
+      displayHouseDetails(rentOption.value, "");
+
+      rentOption.addEventListener("change", handleOptionChange);
+      leaseOption.addEventListener("change", handleOptionChange);
+      searchInput.addEventListener("input", handleOptionChange);
+  });
+</script>
+
+</head>
+
+<body>
+    <div class="details-container">
+        <h1>House Details</h1>
+        <div class="details-header">
+            <label for="rent-option">Rent</label>
+            <input type="radio" id="rent-option" name="option" value="rent" checked>
+            <label for="lease-option">Lease</label>
+            <input type="radio" id="lease-option" name="option" value="lease">
+        </div>
+        <label for="search-input">Search by Address:</label>
+        <input type="text" id="search-input">
+        <table class="details-table" id="details-table">
+            <thead>
+                <tr>
+                    <th>House Type</th>
+                    <th>Address</th>
+                    <th>Details</th>
+                    <th>Owner Name</th>
+                    <th>Phone</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

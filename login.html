@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Options</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url(home.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .login-container {
+        background-color: beige;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: height 0.5s ease;
+        width: 800px;
+        height: 600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .login-option {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        opacity: 0;
+    }
+    .login-option.active {
+        display: block;
+        opacity: 1;
+    }
+    .login-switch {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .login-switch button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .login-switch button:hover {
+        background-color: black;
+    }
+
+    /* Flip Animation */
+    .flip-container {
+        align-items: center;
+        perspective: 1000px;
+        width: 700px; /* Adjust width here */
+        height: 500px; /* Adjust height here */
+    }
+    .flip-container.hover .flipper {
+        transform: rotateY(180deg);
+    }
+    .flipper {
+        width: 100%;
+        height: 100%;
+        transition: 0.6s;
+        transform-style: preserve-3d;
+        position: relative;
+    }
+    .front,
+    .back {
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .front {
+        background-color: burlywood;
+    }
+    .back {
+        background-color: cornflowerblue;
+        transform: rotateY(180deg);
+    }
+    
+    /* Style for input fields */
+    input[type="text"],
+    input[type="password"],
+    input[type="tel"] {
+        width: 80%;
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+</style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="flip-container">
+            <div class="flipper">
+                <div class="front login-option active">
+                    <h2>Owner Login</h2>
+                    <!-- Owner login form goes here -->
+                    <form action="/login-owner" method="POST" id="owner-login-form" >
+                        <label for="owner_userid">User ID</label>
+                        <input type="text" id="owner_userid" name="owner_userid" placeholder="User ID" required><br>
+                        
+                        <label for="owner_password">Password</label>
+                        <input type="password" id="owner_password" name="owner_password" placeholder="Password" required><br>
+                        <br>
+                        <input type="submit" value="Login">
+                    </form>
+                </div>
+                <div class="back login-option">
+                    <h2>Tenant Login</h2>
+                    <!-- Tenant login form goes here -->
+                    <form action="/login-tenant" method="POST" id="tenant-login-form">
+                        <label for="tenant_userid">User ID</label>
+                        <input type="text" id="tenant_userid" name="tenant_userid" placeholder="User ID" required><br>
+                        
+                        <label for="tenant_password">Password</label>
+                        <input type="password" id="tenant_password" name="tenant_password" placeholder="Password" required><br>
+                        <br>
+                        <input type="submit" value="Login">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="login-switch">
+            <button onclick="switchLogin()">Switch Login</button>
+        </div>
+    </div>
+
+    <script>
+        function switchLogin() {
+            var flipContainer = document.querySelector('.flip-container');
+            flipContainer.classList.toggle('hover');
+            
+            var loginOptions = document.querySelectorAll('.login-option');
+            loginOptions.forEach(function(option) {
+                option.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

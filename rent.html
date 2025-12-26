@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rent Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-image: url(home.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+      }
+
+      h1 {
+        margin-top: 50px;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        text-align: left;
+      }
+
+      input {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #4caf50;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Rent Details</h1>
+
+    <!-- Form for entering rent details -->
+    <form
+      id="rent-details-form"
+      onsubmit="submitRentDetails()"
+      action="/rent_details"
+      method="POST"
+    >
+      <label for="house_id">House ID:</label>
+      <input type="text" id="house_id" name="house_id" required />
+
+      <label for="owner_id">Owner ID:</label>
+      <input type="text" id="owner_id" name="owner_id" required />
+
+      <label for="rent_price">Rent Price:</label>
+      <input type="text" id="rent_price" name="rent_price" required />
+
+      <label for="advance_amount">Advance Amount:</label>
+      <input type="text" id="advance_amount" name="advance_amount" required />
+
+      <!-- Submit button (changed to type="submit") -->
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      /*document.getElementById("rentsubmit").addEventListener("click", function() {
+            window.location.href = "ownerhp.html"; // Redirect to tenantview.html
+        });*/
+      // Function to submit rent details
+      function submitRentDetails() {
+        // Retrieve form values
+        var houseId = document.getElementById("house_id").value;
+        var ownerId = document.getElementById("owner_id").value;
+
+        var rentPrice = document.getElementById("rent_price").value;
+        var advanceAmount = document.getElementById("advance_amount").value;
+
+        // Do something with the data, for example, send it to a server or perform validation
+
+        // For this example, let's just alert the values
+        alert(
+          "House ID: " +
+            houseId +
+            "\nOwner ID: " +
+            ownerId +
+            "\nRent Price: " +
+            rentPrice +
+            "\nAdvance Amount: " +
+            advanceAmount
+        );
+
+        window.location.href = "ownerhp.html";
+      }
+    </script>
+  </body>
+</html>

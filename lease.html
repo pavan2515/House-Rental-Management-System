@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lease Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-image: url(home.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+      }
+
+      h1 {
+        margin-top: 50px;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        text-align: left;
+      }
+
+      input {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button {
+        width: calc(50% - 5px);
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #4caf50;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lease Details</h1>
+
+    <!-- Form for entering lease details -->
+    <form
+      id="lease-details-form"
+      onsubmit="submitLeaseDetails(event)"
+      action="/lease-details"
+      method="POST"
+    >
+      <label for="house_id">House ID:</label>
+      <input type="text" id="house_id" name="house_id" required />
+
+      <label for="owner_id">Owner ID:</label>
+      <input type="text" id="owner_id" name="owner_id" required />
+
+      <label for="lease_price">Lease Price:</label>
+      <input type="text" id="lease_price" name="lease_price" required />
+
+      <label for="period">Period:</label>
+      <input type="text" id="period" name="period" required />
+
+      <!-- Submit button -->
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      // Function to handle form submission
+      function submitLeaseDetails(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Retrieve form values
+        var houseId = document.getElementById("house_id").value;
+        var ownerId = document.getElementById("owner_id").value;
+
+        var leasePrice = document.getElementById("lease_price").value;
+        var period = document.getElementById("period").value;
+
+        // Create an object with the form data
+        var formData = {
+          house_id: houseId,
+          owner_id: ownerId,
+          lease_price: leasePrice,
+          period: period,
+        };
+
+        // Send the form data to the server using Fetch API
+        fetch("/lease-details", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data); // Log the response from the server
+            // Optionally, you can redirect or perform other actions on successful submission
+            window.location.href = "ownerhp.html"; // Replace with the actual path to the second page
+
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Owner House Details Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        background-image: url(home.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        overflow-y: auto;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 20px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      form label {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      form input {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      form button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #4caf50;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Owner House Details Form</h1>
+
+    <!-- Form for entering owner house details -->
+    <form
+  id="owner-house-details-form"
+  action="/house_details"
+  method="POST"
+  enctype="multipart/form-data"
+>
+      <label for="house_id">House ID:</label>
+      <input type="text" id="house_id" name="house_id" required />
+
+      <label for="owner_id">Owner ID:</label>
+      <input type="text" id="owner_id" name="owner_id" required />
+
+      <label for="house_type">House Type:</label>
+      <input type="text" id="house_type" name="house_type" required />
+
+      <label for="address">Address:</label>
+      <input type="text" id="address" name="address" required />
+
+      <label for="image_data">Image Upload:</label>
+  <input type="file" id="image_data" name="image_data" accept="image/*" required />
+
+      <button type="button" id="add-btn">Submit</button>
+    </form>
+
+    <!-- Script to handle form submission -->
+    <!-- Script to handle form submission with image upload -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const addBtn = document.getElementById("add-btn");
+
+    addBtn.addEventListener("click", async function () {
+      const house_id = document.getElementById("house_id").value;
+      const owner_id = document.getElementById("owner_id").value;
+      const house_type = document.getElementById("house_type").value;
+      const address = document.getElementById("address").value;
+      const image_data = document.getElementById("image_data").files[0];
+
+      // Create FormData object and append form data
+      const formData = new FormData();
+      formData.append("house_id", house_id);
+      formData.append("owner_id", owner_id);
+      formData.append("house_type", house_type);
+      formData.append("address", address);
+      formData.append("image_data", image_data);
+
+      try {
+        // Send the form data to the server using Fetch API
+        const response = await fetch("/house_details", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          console.log("Form data submitted successfully");
+          // You can redirect or perform other actions on successful submission
+          window.location.href = "/next.html";
+        } else {
+          console.error("Error submitting form data");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    });
+  });
+</script>
+
+      
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Homepage</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        background-color: whitesmoke;
+      }
+
+      .container {
+        display: flex;
+        width: 80%;
+        height: 80%;
+        background-image: url(home.jpg);
+        background-repeat: no-repeat;
+        background-size: contain;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .left-side {
+        flex: 1;
+        margin: auto;
+        justify-content: center;
+        align-items: center;
+        -webkit-text-fill-color: rgb(5, 16, 26);
+      }
+
+      .right-side {
+        flex: 1;
+        background-color: rgb(198, 174, 215);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .separator {
+        width: 2px;
+        background-color: #ccc;
+      }
+
+      .options {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .options button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .options button:hover {
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-side">
+        <b
+          ><h1
+            style="
+              text-align: center;
+              font-size: 30px;
+              padding-top: 0%;
+              -webkit-text-fill-color: #fff;
+            "
+          >
+            Welcome to Our <br />
+            House Rental Management System
+          </h1></b
+        >
+        <br /><br />
+      </div>
+      <div class="separator"></div>
+      <div class="right-side">
+        <div class="options">
+          <b
+            ><p style="align-items: center; font-size: larger">
+              Get Started
+            </p></b
+          >
+          <a href="login.html"
+            ><button onclick="alert('Login clicked')">Login</button></a
+          >
+          <a href="signup.html"><button>Signup</button></a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

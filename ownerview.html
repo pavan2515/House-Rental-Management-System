@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: cadetblue;
+        }
+
+        #table-container {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        #house-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #house-table th, #house-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #house-table th {
+            background-color: #f2f2f2;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <!-- Your existing HTML and styles -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchData();
+        });
+
+        function fetchData() {
+            fetch('/api/house-details')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Fetched data:', data);
+                    displayData(data);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Add this code to your existing script tag
+        function displayData(data) {
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            data.forEach(row => {
+                const newRow = document.createElement('tr');
+
+                // Display data in regular columns
+                Object.entries(row).forEach(([key, value]) => {
+                    const cell = document.createElement('td');
+
+                    if (key === 'image_data') {
+                        // If the column is 'image_data', create an image element
+                        const image = document.createElement('img');
+                        image.src = `data:image/jpeg;base64,${value}`; // Assuming it's a JPEG image
+                        image.style.maxWidth = '100px'; // Adjust the size as needed
+                        cell.appendChild(image);
+                    } else {
+                        // Otherwise, create a regular text node
+                        cell.textContent = value;
+                    }
+
+                    newRow.appendChild(cell);
+                });
+
+                // Add Edit and Delete buttons
+                const editCell = document.createElement('td');
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.addEventListener('click', () => editRow(row));
+                editCell.appendChild(editButton);
+                newRow.appendChild(editCell);
+
+                const deleteCell = document.createElement('td');
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => deleteRow(row));
+                deleteCell.appendChild(deleteButton);
+                newRow.appendChild(deleteCell);
+
+                tableBody.appendChild(newRow);
+            });
+
+            console.log('Displayed data on the table.');
+        }
+
+        function editRow(row) {
+            const modal = document.getElementById('editModal');
+            modal.style.display = 'flex';
+
+            // Populate the form with existing data
+            document.getElementById('editedHouseType').value = row.house_type;
+            document.getElementById('editedAddress').value = row.address;
+
+            // Add an event listener to the form
+            document.getElementById('editForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                // Get the updated data from the form
+                const updatedHouseType = document.getElementById('editedHouseType').value;
+                const updatedAddress = document.getElementById('editedAddress').value;
+
+                // Call your update function with the updated data
+                updateRow(row, { house_type: updatedHouseType, address: updatedAddress });
+
+                // Hide the modal after submission
+                modal.style.display = 'none';
+            });
+        }
+
+        function updateRow(row, updatedData) {
+            // Send an HTTP request to update the server
+            fetch(`/api/update-house/${row.house_id}/${row.owner_id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Update response:', data);
+                    // Refresh the data after updating
+                    fetchData();
+                })
+                .catch(error => console.error('Error updating data:', error));
+        }
+
+        function deleteRow(row) {
+            // Send a request to the server to delete the row
+            fetch(`/api/delete-house/${row.house_id}/${row.owner_id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Delete response:', data);
+                    // Refresh the data after deletion
+                    fetchData();
+                })
+                .catch(error => console.error('Error deleting data:', error));
+        }
+    </script>
+</head>
+<body>
+
+<div id="table-container">
+    <h2 style="text-align: center;">House Details</h2>
+    <table id="house-table">
+        <thead>
+            <tr>
+                <th>House ID</th>
+                <th>Owner ID</th>
+                <th>House Type</th>
+                <th>Address</th>
+                <th>Image</th>
+                <th>Rent Price</th>
+                <th>Advance Amount</th>
+                <th>Lease Price</th>
+                <th>Lease Period</th>
+                <th colspan="2">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div>
+
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h2>Edit House Details</h2>
+        <form id="editForm">
+            <label for="editedHouseType">House Type:</label>
+            <input type="text" id="editedHouseType" name="editedHouseType" required>
+
+            <label for="editedAddress">Address:</label>
+            <input type="text" id="editedAddress" name="editedAddress" required>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

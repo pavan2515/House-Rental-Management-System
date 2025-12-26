@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Owner Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        background-image: url(home.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        overflow-y: auto;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 20px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      form label {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      form input {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      form button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #4caf50;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Owner Details</h1>
+
+    <!-- Form for entering owner details -->
+    <form id="owner-details-form" action="/ownerdet" method="POST">
+      <label for="owner_id">Owner ID:</label>
+      <input type="text" id="owner_id" name="owner_id" required />
+
+      <label for="user_id">User ID:</label>
+      <input type="text" id="user_id" name="user_id" required />
+
+      <label for="f_name">First Name:</label>
+      <input type="text" name="f_name" id="f_name" required />
+
+      <label for="l_name">Last Name:</label>
+      <input type="text" name="l_name" id="l_name" required />
+
+      <label for="ph_no">Phone Number:</label>
+      <input type="text" name="ph_no" id="ph_no" required />
+
+      <button type="button" id="add-owner-btn">Add Owner Details</button>
+    </form>
+
+    <script>
+      document
+        .getElementById("add-owner-btn")
+        .addEventListener("click", function () {
+          window.location.href = "ownerhp.html"; // Redirect to tenantview.html
+        });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const addOwnerBtn = document.getElementById("add-owner-btn");
+
+        addOwnerBtn.addEventListener("click", function () {
+          const owner_id = document.getElementById("owner_id").value;
+          const user_id = document.getElementById("user_id").value;
+          const f_name = document.getElementById("f_name").value;
+          const l_name = document.getElementById("l_name").value;
+          const ph_no = document.getElementById("ph_no").value;
+
+          // Validate or process owner details as needed
+
+          // You can send the data to the server using fetch or another method
+          // Example using fetch:
+          fetch("/ownerdet", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              owner_id: owner_id,
+              user_id: user_id,
+              f_name: f_name,
+              l_name: l_name,
+              ph_no: ph_no,
+            }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              // Handle success response from the server
+              console.log("Server response:", data);
+              // Optionally, redirect or show a success message
+            })
+            .catch((error) => {
+              // Handle error
+              console.error("Error:", error);
+            });
+        });
+      });
+    </script>
+  </body>
+</html>
